@@ -1,0 +1,14 @@
+name: ShopTradeMarket
+version: '1.0'
+main: me.revin.shopTradeMarket.ShopTradeMarket
+api-version: '1.20'
+depend: [Citizens]
+commands:
+  상점생성:
+    description: 상점을 생성합니다.
+    usage: /<command> <상점이름>
+    permission: shopTradeMarket.create
+  상점삭제:
+    description: 상점을 삭제합니다.
+    usage: /<command> <상점이름>
+    permission: shopTradeMarket.delete
