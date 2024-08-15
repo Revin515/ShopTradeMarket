@@ -4,6 +4,7 @@ import me.revin.shopTradeMarket.shop.config.ShopConfigManager;
 import me.revin.shopTradeMarket.shop.entity.Category;
 import me.revin.shopTradeMarket.shop.entity.Item;
 import me.revin.shopTradeMarket.shop.entity.Shop;
+import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -34,6 +35,7 @@ public class CreateShopCommand implements CommandExecutor {
         configManager = new ShopConfigManager();
         Player player = (Player) sender;
         String shopName = args[0];
+        int id = createNPC(player, shopName);
 
         List<Item> itemList = new ArrayList<>();
         Category category = new Category("기본", itemList);
@@ -41,10 +43,9 @@ public class CreateShopCommand implements CommandExecutor {
         List<Category> categoryList = new ArrayList<>();
         categoryList.add(category);
 
-        Shop shop = new Shop(shopName, categoryList);
-
+        Shop shop = new Shop(id, shopName, categoryList);
         configManager.saveShopData(shop);
-        createNPC(player, shopName);
+
         player.sendMessage("상점 " + shopName + " 이(가) 생성되었습니다.");
 
         return true;

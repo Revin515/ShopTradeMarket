@@ -29,6 +29,7 @@ public class ShopConfigSerializer {
             categoryDataList.add(categoryData);
         }
 
+        shopData.put("shop-id", shop.getShopId());
         shopData.put("shop-name", shop.getShopName());
         shopData.put("category-list", categoryDataList);
 
@@ -36,6 +37,7 @@ public class ShopConfigSerializer {
     }
 
     public static Shop deserialize(Map<String, Object> shopData) {
+        int id = (Integer) shopData.get("shop-id");
         String shopName = (String) shopData.get("shop-name");
         List<Category> categoryList = new ArrayList<>();
 
@@ -58,7 +60,7 @@ public class ShopConfigSerializer {
             categoryList.add(category);
         }
 
-        Shop shop = new Shop(shopName, categoryList);
+        Shop shop = new Shop(id, shopName, categoryList);
 
         return shop;
     }

@@ -10,10 +10,12 @@ import org.bukkit.entity.Player;
 
 public class NPCManager {
 
-    public static void createNPC(Player player, String name) {
+    public static int createNPC(Player player, String name) {
         NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, name);
         npc.spawn(player.getLocation());
         npc.addTrait(ShopTrait.class);
+
+        return npc.getId();
     }
 
     public static boolean verifyNPCbyTrait(NPC npc, String traitName) {

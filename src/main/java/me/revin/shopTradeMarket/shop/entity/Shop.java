@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 public class Shop {
 
+    private int shopId;
     private String shopName;
     private List<Category> categoryList;
 }

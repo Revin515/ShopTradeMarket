@@ -18,7 +18,9 @@ public class ShopConfigManager extends ConfigManager {
     }
 
     public void saveShopData(Shop shop) {
-        getConfig().set(shop.getShopName(), serialize(shop));
+        String shopId = Integer.toString(shop.getShopId());
+
+        getConfig().set(shopId, serialize(shop));
         save();
     }
 

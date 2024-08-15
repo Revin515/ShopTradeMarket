@@ -2,7 +2,8 @@ package me.revin.shopTradeMarket.shop;
 
 import me.revin.shopTradeMarket.shop.command.CreateShopCommand;
 import me.revin.shopTradeMarket.shop.command.DeleteShopCommand;
-import me.revin.shopTradeMarket.shop.event.ShopOpenEvent;
+import me.revin.shopTradeMarket.shop.event.ShopEvent;
+import me.revin.shopTradeMarket.shop.event.ShopMenuEvent;
 import org.bukkit.Bukkit;
 
 import static me.revin.shopTradeMarket.ShopTradeMarket.*;
@@ -15,6 +16,7 @@ public class ShopManager {
     }
 
     public void registerEvents() {
-        Bukkit.getPluginManager().registerEvents(new ShopOpenEvent(), getInstance());
+        Bukkit.getPluginManager().registerEvents(new ShopEvent(), getInstance());
+        Bukkit.getPluginManager().registerEvents(new ShopMenuEvent(), getInstance());
     }
 }

@@ -9,7 +9,6 @@ import java.io.IOException;
 public abstract class ConfigManager {
 
     private File file;
-
     @Getter
     private YamlConfiguration config;
 
