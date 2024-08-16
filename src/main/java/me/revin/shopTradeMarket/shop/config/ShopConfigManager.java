@@ -24,8 +24,10 @@ public class ShopConfigManager extends ConfigManager {
         save();
     }
 
-    public Shop loadShopData(String shopName) {
-        Map<String, Object> values = getConfig().getConfigurationSection(shopName).getValues(false);
+    public Shop loadShopData(int id) {
+        String shopId = Integer.toString(id);
+
+        Map<String, Object> values = getConfig().getConfigurationSection(shopId).getValues(false);
         Shop shop = deserialize(values);
 
         return shop;

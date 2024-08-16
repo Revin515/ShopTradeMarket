@@ -25,6 +25,7 @@ public class ShopConfigSerializer {
             }
 
             categoryData.put("category-name", category.getCategoryName());
+            categoryData.put("icon-material", category.getIconMaterial());
             categoryData.put("item-list", itemDataList);
             categoryDataList.add(categoryData);
         }
@@ -44,6 +45,7 @@ public class ShopConfigSerializer {
         List<Map<String, Object>> categoryDataList = (List<Map<String, Object>>) shopData.get("category-list");
         for (Map<String, Object> categoryData : categoryDataList) {
             String categoryName = (String) categoryData.get("category-name");
+            String iconMaterial = (String) categoryData.get("icon-material");
             List<Item> itemList = new ArrayList<>();
 
             List<Map<String, Object>> itemDataList = (List<Map<String, Object>>) categoryData.get("item-list");
@@ -56,7 +58,7 @@ public class ShopConfigSerializer {
                 itemList.add(item);
             }
 
-            Category category = new Category(categoryName, itemList);
+            Category category = new Category(categoryName, iconMaterial, itemList);
             categoryList.add(category);
         }
 
