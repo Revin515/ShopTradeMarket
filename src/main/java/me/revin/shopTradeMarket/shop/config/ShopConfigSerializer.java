@@ -24,6 +24,7 @@ public class ShopConfigSerializer {
                 itemDataList.add(itemData);
             }
 
+            categoryData.put("category-id", category.getCategoryId());
             categoryData.put("category-name", category.getCategoryName());
             categoryData.put("icon-material", category.getIconMaterial());
             categoryData.put("item-list", itemDataList);
@@ -32,18 +33,25 @@ public class ShopConfigSerializer {
 
         shopData.put("shop-id", shop.getShopId());
         shopData.put("shop-name", shop.getShopName());
+        shopData.put("shop-type", shop.getShopType());
+        shopData.put("shop-owner", shop.getShopOwner());
+        shopData.put("last-category-id", shop.getLastCategoryId());
         shopData.put("category-list", categoryDataList);
 
         return shopData;
     }
 
     public static Shop deserialize(Map<String, Object> shopData) {
-        int id = (Integer) shopData.get("shop-id");
+        int shopId = (Integer) shopData.get("shop-id");
         String shopName = (String) shopData.get("shop-name");
+        ShopType shopType = ShopType.valueOf((String) shopData.get("shop-type"));
+        UUID shopOwner = UUID.fromString((String) shopData.get("shop-owner"));
+        int lastCategoryId = (Integer) shopData.get("last-category-id");
         List<Category> categoryList = new ArrayList<>();
 
         List<Map<String, Object>> categoryDataList = (List<Map<String, Object>>) shopData.get("category-list");
         for (Map<String, Object> categoryData : categoryDataList) {
+            int categoryId = (Integer) categoryData.get("category-id");
             String categoryName = (String) categoryData.get("category-name");
             String iconMaterial = (String) categoryData.get("icon-material");
             List<Item> itemList = new ArrayList<>();
@@ -58,11 +66,11 @@ public class ShopConfigSerializer {
                 itemList.add(item);
             }
 
-            Category category = new Category(categoryName, iconMaterial, itemList);
+            Category category = new Category(categoryId, categoryName, iconMaterial, itemList);
             categoryList.add(category);
         }
 
-        Shop shop = new Shop(id, shopName, categoryList);
+        Shop shop = new Shop(shopId, shopName, shopType, shopOwner, lastCategoryId, categoryList);
 
         return shop;
     }
