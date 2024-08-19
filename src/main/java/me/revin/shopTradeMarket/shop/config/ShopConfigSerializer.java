@@ -1,8 +1,8 @@
 package me.revin.shopTradeMarket.shop.config;
 
-import me.revin.shopTradeMarket.shop.entity.Category;
 import me.revin.shopTradeMarket.shop.entity.Item;
 import me.revin.shopTradeMarket.shop.entity.Shop;
+import me.revin.shopTradeMarket.shop.entity.ShopType;
 
 import java.util.*;
 
@@ -11,12 +11,11 @@ public class ShopConfigSerializer {
     public static Map<String, Object> serialize(Shop shop) {
         Map<String, Object> shopData = new LinkedHashMap<>();
 
-        List<Map<String, Object>> categoryDataList = new ArrayList<>();
-        for (Category category : shop.getCategoryList()) {
-            Map<String, Object> categoryData = new LinkedHashMap<>();
+        List<List<Map<String, Object>>> itemPageDataList = new ArrayList<>();
+        for (List<Item> pageList : shop.getItemList()) {
 
             List<Map<String, Object>> itemDataList = new ArrayList<>();
-            for (Item item : category.getItemList()) {
+            for (Item item : pageList) {
                 Map<String, Object> itemData = new LinkedHashMap<>();
                 itemData.put("item-id", item.getItemId());
                 itemData.put("price", item.getPrice());
@@ -24,19 +23,14 @@ public class ShopConfigSerializer {
                 itemDataList.add(itemData);
             }
 
-            categoryData.put("category-id", category.getCategoryId());
-            categoryData.put("category-name", category.getCategoryName());
-            categoryData.put("icon-material", category.getIconMaterial());
-            categoryData.put("item-list", itemDataList);
-            categoryDataList.add(categoryData);
+            itemPageDataList.add(itemDataList);
         }
 
         shopData.put("shop-id", shop.getShopId());
         shopData.put("shop-name", shop.getShopName());
         shopData.put("shop-type", shop.getShopType());
         shopData.put("shop-owner", shop.getShopOwner());
-        shopData.put("last-category-id", shop.getLastCategoryId());
-        shopData.put("category-list", categoryDataList);
+        shopData.put("item-list", itemPageDataList);
 
         return shopData;
     }
@@ -46,31 +40,25 @@ public class ShopConfigSerializer {
         String shopName = (String) shopData.get("shop-name");
         ShopType shopType = ShopType.valueOf((String) shopData.get("shop-type"));
         UUID shopOwner = UUID.fromString((String) shopData.get("shop-owner"));
-        int lastCategoryId = (Integer) shopData.get("last-category-id");
-        List<Category> categoryList = new ArrayList<>();
+        List<List<Item>> itemList = new ArrayList<>();
 
-        List<Map<String, Object>> categoryDataList = (List<Map<String, Object>>) shopData.get("category-list");
-        for (Map<String, Object> categoryData : categoryDataList) {
-            int categoryId = (Integer) categoryData.get("category-id");
-            String categoryName = (String) categoryData.get("category-name");
-            String iconMaterial = (String) categoryData.get("icon-material");
-            List<Item> itemList = new ArrayList<>();
+        List<List<Map<String, Object>>> itemPageDataList = (List<List<Map<String, Object>>>) shopData.get("item-list");
+        for (List<Map<String, Object>> itemDataList : itemPageDataList) {
 
-            List<Map<String, Object>> itemDataList = (List<Map<String, Object>>) categoryData.get("item-list");
+            List<Item> items = new ArrayList<>();
             for (Map<String, Object> itemData : itemDataList) {
-                String itemName = (String) itemData.get("item-name");
+                String itemName = (String) itemData.get("item-id");
                 Integer price = (Integer) itemData.get("price");
                 Integer pos = (Integer) itemData.get("pos");
 
                 Item item = new Item(itemName, price, pos);
-                itemList.add(item);
+                items.add(item);
             }
 
-            Category category = new Category(categoryId, categoryName, iconMaterial, itemList);
-            categoryList.add(category);
+            itemList.add(items);
         }
 
-        Shop shop = new Shop(shopId, shopName, shopType, shopOwner, lastCategoryId, categoryList);
+        Shop shop = new Shop(shopId, shopName, shopType, shopOwner, itemList);
 
         return shop;
     }

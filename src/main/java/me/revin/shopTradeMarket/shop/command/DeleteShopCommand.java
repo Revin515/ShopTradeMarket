@@ -1,5 +1,6 @@
 package me.revin.shopTradeMarket.shop.command;
 
+import lombok.RequiredArgsConstructor;
 import me.revin.shopTradeMarket.common.npc.NPCManager;
 import me.revin.shopTradeMarket.shop.config.ShopConfigManager;
 import org.bukkit.command.Command;
@@ -8,9 +9,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+@RequiredArgsConstructor
 public class DeleteShopCommand implements CommandExecutor {
 
-    private ShopConfigManager configManager;
+    private final ShopConfigManager configManager;
 
     /**
      * /상점삭제 [상점이름]
@@ -24,7 +26,6 @@ public class DeleteShopCommand implements CommandExecutor {
             return false;
         }
 
-        configManager = new ShopConfigManager();
         Player player = (Player) sender;
         String shopName = args[0];
 

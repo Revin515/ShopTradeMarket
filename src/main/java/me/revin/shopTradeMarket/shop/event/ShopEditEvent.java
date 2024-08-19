@@ -8,37 +8,41 @@ import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static me.revin.shopTradeMarket.common.gui.GUIManager.*;
-import static me.revin.shopTradeMarket.common.npc.NPCManager.*;
+import static me.revin.shopTradeMarket.common.npc.NPCManager.verifyNPCbyTrait;
 
 @RequiredArgsConstructor
-public class ShopEvent implements Listener {
+public class ShopEditEvent implements Listener {
 
     private final ShopConfigManager configManager;
     private Map<UUID, Integer> playerNpcMap = new HashMap<>();
 
     /**
-     * NPC 우클릭하여 상점 GUI 표시
+     * NPC 쉬프트 + 우클릭시 상점관리 메뉴 표시
+     * 만약 플레이어가 OP가 아닐 경우 해당 NPC 상점이 자신의 것이 맞는지 체크, 아니면 GUI 표시 안함
      */
     @EventHandler
-    public void onRightClick(NPCRightClickEvent event) {
+    public void onShopMenuOpen(NPCRightClickEvent event) {
+        if (!event.getClicker().isSneaking()) return;
+        if (!verifyNPCbyTrait(event.getNPC(), "shop"))  return;
+
         Player player = event.getClicker();
+        UUID uuid = player.getUniqueId();
         NPC npc = event.getNPC();
 
-        if (player.isSneaking()) return;
-        if (!verifyNPCbyTrait(npc, "shop")) return;
-
         Shop shop = configManager.loadShopData(npc.getId());
-        String shopName = npc.getName();
+        UUID shopOwner = shop.getShopOwner();
 
-        playerNpcMap.put(player.getUniqueId(), npc.getId());
-        player.openInventory(createInventoryGUI(shopName, shop, 0));
+        if (!player.isOp()) {
+            if (!shopOwner.equals(uuid)) return;
+        }
+
+        playerNpcMap.put(uuid, npc.getId());
+        player.openInventory(createInventoryGUI(npc.getName(), shop, 0));
     }
 
     /**

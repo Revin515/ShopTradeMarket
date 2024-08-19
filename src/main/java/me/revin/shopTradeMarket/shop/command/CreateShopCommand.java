@@ -1,8 +1,8 @@
 package me.revin.shopTradeMarket.shop.command;
 
+import lombok.RequiredArgsConstructor;
 import me.revin.shopTradeMarket.shop.config.ShopConfigManager;
-import me.revin.shopTradeMarket.shop.config.ShopType;
-import me.revin.shopTradeMarket.shop.entity.Category;
+import me.revin.shopTradeMarket.shop.entity.ShopType;
 import me.revin.shopTradeMarket.shop.entity.Item;
 import me.revin.shopTradeMarket.shop.entity.Shop;
 import org.bukkit.command.Command;
@@ -17,9 +17,10 @@ import java.util.UUID;
 
 import static me.revin.shopTradeMarket.common.npc.NPCManager.*;
 
+@RequiredArgsConstructor
 public class CreateShopCommand implements CommandExecutor {
 
-    private ShopConfigManager configManager;
+    private final ShopConfigManager configManager;
 
     /**
      * /상점생성 [상점이름]
@@ -35,7 +36,6 @@ public class CreateShopCommand implements CommandExecutor {
             return false;
         }
 
-        configManager = new ShopConfigManager();
         Player player = (Player) sender;
         String shopName = args[0];
         int shopId = createNPC(player, shopName);
@@ -45,7 +45,7 @@ public class CreateShopCommand implements CommandExecutor {
         if (player.isOp()) {
             shopType = ShopType.SERVER;
         } else {
-            if (configManager.getConfig().contains(shopOwner.toString())) {
+            if (configManager.containsShopData(shopOwner)) {
                 player.sendMessage("유저 상점은 1개만 보유할 수 있습니다.");
                 return false;
             }
@@ -53,14 +53,12 @@ public class CreateShopCommand implements CommandExecutor {
             shopType = ShopType.USER;
         }
 
+        List<List<Item>> itemPageList = new ArrayList<>();
         List<Item> itemList = new ArrayList<>();
-        int newCategoryId = 0;
-        Category category = new Category(newCategoryId, "기본", "CHEST", itemList);
 
-        List<Category> categoryList = new ArrayList<>();
-        categoryList.add(category);
+        itemPageList.add(itemList);
 
-        Shop shop = new Shop(shopId, shopName, shopType, shopOwner, newCategoryId, categoryList);
+        Shop shop = new Shop(shopId, shopName, shopType, shopOwner, itemPageList);
         configManager.saveShopData(shop);
 
         player.sendMessage("상점 " + shopName + " 이(가) 생성되었습니다.");
