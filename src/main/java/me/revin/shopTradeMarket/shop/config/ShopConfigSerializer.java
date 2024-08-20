@@ -18,6 +18,7 @@ public class ShopConfigSerializer {
             for (Item item : pageList) {
                 Map<String, Object> itemData = new LinkedHashMap<>();
                 itemData.put("item-id", item.getItemId());
+                itemData.put("quantity", item.getQuantity());
                 itemData.put("price", item.getPrice());
                 itemData.put("pos", item.getPos());
                 itemDataList.add(itemData);
@@ -48,10 +49,11 @@ public class ShopConfigSerializer {
             List<Item> items = new ArrayList<>();
             for (Map<String, Object> itemData : itemDataList) {
                 String itemName = (String) itemData.get("item-id");
+                Integer quantity = (Integer) itemData.get("quantity");
                 Integer price = (Integer) itemData.get("price");
                 Integer pos = (Integer) itemData.get("pos");
 
-                Item item = new Item(itemName, price, pos);
+                Item item = new Item(itemName, quantity, price, pos);
                 items.add(item);
             }
 

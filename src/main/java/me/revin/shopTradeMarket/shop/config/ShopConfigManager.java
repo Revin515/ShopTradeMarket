@@ -14,8 +14,7 @@ import static me.revin.shopTradeMarket.shop.config.ShopConfigSerializer.*;
 
 public class ShopConfigManager {
 
-    @Getter
-    private static final ShopConfigManager instance = new ShopConfigManager();
+    private static ShopConfigManager instance;
     private File file;
     private YamlConfiguration config;
 
@@ -26,6 +25,14 @@ public class ShopConfigManager {
         this.file = new File(BASE_PATH, FILE_NAME);
         this.config = YamlConfiguration.loadConfiguration(file);
         save();
+    }
+
+    public static ShopConfigManager getInstance() {
+        if (instance == null) {
+            instance = new ShopConfigManager();
+        }
+
+        return instance;
     }
 
     public void saveShopData(Shop shop) {
