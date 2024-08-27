@@ -10,7 +10,11 @@ import org.bukkit.entity.Player;
 
 public class NPCManager {
 
-    public static int createNPC(Player player, String name) {
+    private static NPCManager instance;
+
+    private NPCManager() {}
+
+    public int createNPC(Player player, String name) {
         NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, name);
         npc.spawn(player.getLocation());
         npc.addTrait(ShopTrait.class);
@@ -18,7 +22,7 @@ public class NPCManager {
         return npc.getId();
     }
 
-    public static boolean verifyNPCbyTrait(NPC npc, String traitName) {
+    public boolean verifyNPCbyTrait(NPC npc, String traitName) {
         for (Trait trait : npc.getTraits()) {
             if (trait.getName().equals("shop")) return true;
         }
@@ -26,7 +30,7 @@ public class NPCManager {
         return false;
     }
 
-    public static void deleteNPC(String name) {
+    public void deleteNPC(String name) {
         NPCRegistry npcRegistry = CitizensAPI.getNPCRegistry();
 
         for (NPC npc : npcRegistry) {
@@ -39,5 +43,13 @@ public class NPCManager {
 
     public void registerTrait() {
         CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(ShopTrait.class));
+    }
+
+    public static NPCManager getInstance() {
+        if (instance == null) {
+            instance = new NPCManager();
+        }
+
+        return instance;
     }
 }

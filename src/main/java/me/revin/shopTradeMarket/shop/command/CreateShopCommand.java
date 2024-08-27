@@ -1,6 +1,7 @@
 package me.revin.shopTradeMarket.shop.command;
 
 import lombok.RequiredArgsConstructor;
+import me.revin.shopTradeMarket.common.npc.NPCManager;
 import me.revin.shopTradeMarket.shop.config.ShopConfigManager;
 import me.revin.shopTradeMarket.shop.entity.ShopType;
 import me.revin.shopTradeMarket.shop.entity.Item;
@@ -15,12 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static me.revin.shopTradeMarket.common.npc.NPCManager.*;
-
 @RequiredArgsConstructor
 public class CreateShopCommand implements CommandExecutor {
 
     private final ShopConfigManager configManager;
+    private final NPCManager npcManager;
 
     /**
      * /상점생성 [상점이름]
@@ -38,7 +38,7 @@ public class CreateShopCommand implements CommandExecutor {
 
         Player player = (Player) sender;
         String shopName = args[0];
-        int shopId = createNPC(player, shopName);
+        int shopId = npcManager.createNPC(player, shopName);
         UUID shopOwner = player.getUniqueId();
         ShopType shopType;
 

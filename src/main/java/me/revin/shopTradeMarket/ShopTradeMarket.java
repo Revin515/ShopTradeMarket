@@ -13,11 +13,10 @@ public final class ShopTradeMarket extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        npcManager = new NPCManager();
+        npcManager = NPCManager.getInstance();
         shopManager = new ShopManager();
 
         npcManager.registerTrait();
-
         shopManager.registerCommands();
         shopManager.registerEvents();
     }

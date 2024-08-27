@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class DeleteShopCommand implements CommandExecutor {
 
     private final ShopConfigManager configManager;
+    private final NPCManager npcManager;
 
     /**
      * /상점삭제 [상점이름]
@@ -30,7 +31,7 @@ public class DeleteShopCommand implements CommandExecutor {
         String shopName = args[0];
 
         configManager.deleteShopData(shopName);
-        NPCManager.deleteNPC(shopName);
+        npcManager.deleteNPC(shopName);
         player.sendMessage("상점 " + shopName + " 이(가) 삭제되었습니다.");
 
         return true;

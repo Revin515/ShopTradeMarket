@@ -1,6 +1,5 @@
 package me.revin.shopTradeMarket.shop.config;
 
-import lombok.Getter;
 import me.revin.shopTradeMarket.ShopTradeMarket;
 import me.revin.shopTradeMarket.shop.entity.Shop;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -40,6 +39,7 @@ public class ShopConfigManager {
 
         config.set(shopId, serialize(shop));
         save();
+        reload();
     }
 
     public Shop loadShopData(int id) {
